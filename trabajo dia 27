@@ -1,0 +1,338 @@
+print("===================================")
+print(" TEMPERATURA DE INCUBACION")
+print("      TORTUGAS MARINAS")
+print("===================================")
+
+temperatura = float(input("Ingrese la temperatura en grados Celsius: "))
+
+if temperatura < 26:
+    print("TEMPERATURA MUY BAJA")
+    print("Alerta: la temperatura no es adecuada para los huevos.")
+
+elif temperatura <= 34:
+    print("TEMPERATURA NORMAL")
+    print("La temperatura esta dentro del rango adecuado.")
+
+else:
+    print("TEMPERATURA MUY ALTA")
+    print("Alerta: la temperatura supera el limite adecuado.")
+
+print("===================================")
+"""
+Cree una función para año bisiesto. Use el calendario gregoriano: los múltiplos de
+100 no son bisiestos salvo que también sean múltiplos de 400. El escenario hace dos
+llamadas y comprueba si ambos años comparten la misma condición de bisiesto:
+verdadero cuando ambos retornos son iguales, falso cuando son diferentes. Contrato:
+Año bisiesto: recibe un año entero entre 1 y 9999 y devuelve verdadero si el año es
+bisiesto; falso en otro caso.
+"""
+
+
+def año_bisiesto(anio):
+    """Devuelve True si el año es bisiesto según el calendario gregoriano."""
+    if anio < 1 or anio > 9999:
+        raise ValueError("El año debe estar entre 1 y 9999")
+    if anio % 400 == 0:
+        return True
+    if anio % 100 == 0:
+        return False
+    return anio % 4 == 0
+
+
+anio1 = int(input("Escribe el primer año entre 1 y 9999: "))
+anio2 = int(input("Escribe el segundo año entre 1 y 9999: "))
+
+print(año_bisiesto(anio1) == año_bisiesto(anio2))
+
+"""
+Caso. Cree las funciones necesarias para costo de envío con cobertura y descuento. Es un modelo
+ficticio. La tarifa base es 5000 pesos en zona 1 y 8000 en zona 2; cada kilogramo por encima del
+primero agrega 2000 pesos proporcionales, sin redondear el peso. Una compra de al menos 100000
+pesos reduce el costo válido un 50 %. Cree funciones de cobertura lógica, costo inicial y costo final.
+La última reutiliza las otras y nunca descuenta la señal -1. El escenario muestra el retorno o «sin
+cobertura». Contratos en orden de parámetros: Cobertura: recibe peso real en kg y zona entera y
+devuelve lógico. Costo inicial: recibe peso real mayor que cero y hasta 20 kg, zona 1 o 2 y devuelve
+real positivo en pesos. Costo final: recibe peso real en kg, zona entera, compra real no negativa en
+pesos y devuelve real no negativo en pesos o - 1.
+Fórmula o relación: Base según zona; recargo = 2000 * máximo entre (peso - 1) y 0; costo inicial
+= base + recargo; costo final = costo inicial * 0,50 si compra ≥ 100000, o costo inicial en otro
+caso.
+
+"""
+def cobertura(peso, zona):
+    """Verifica si el envío tiene cobertura."""
+    return 0 < peso <= 20 and type(zona) is int and zona in (1, 2)
+
+
+def costo_inicial(peso, zona):
+    """Calcula el costo base más el recargo por peso."""
+    if zona == 1:
+        base = 5000
+    else:
+        base = 8000
+
+    recargo = 2000 * max(peso - 1, 0)
+
+    return base + recargo
+
+
+def costo_final(peso, zona, compra):
+    """Calcula el costo final del envío."""
+    if not cobertura(peso, zona):
+        return -1
+
+    costo = costo_inicial(peso, zona)
+
+    if compra >= 100000:
+        costo = costo * 0.50
+
+    return costo
+
+
+def escenario(peso, zona, compra):
+    resultado = costo_final(peso, zona, compra)
+
+    if resultado == -1:
+        print("Sin cobertura")
+    else:
+        print("El costo final del envío es:", resultado, "pesos")
+
+
+# Programa principal
+if __name__ == "__main__":
+    peso = float(input("Ingrese el peso del paquete en kg: "))
+    zona = int(input("Ingrese la zona (1 o 2): "))
+    compra = float(input("Ingrese el valor de la compra en pesos: "))
+
+    escenario(peso, zona, compra)
+"""
+Cree una función para comprobar múltiplos en ambas direcciones. Se adopta la
+protección del divisor cero: nunca se efectúa una división entre cero. El cero es múltiplo
+de cualquier entero no nulo. El escenario intercambia los argumentos en una segunda
+llamada y muestra ambos retornos. Contrato: Comprobar múltiplos en ambas
+direcciones: recibe dos enteros: primero el posible múltiplo y luego el divisor y devuelve
+un valor lógico; falso si el divisor es cero o si no hay divisibilidad.
+
+"""
+
+def es_multiplo(posible_multiplo: int, divisor: int) -> bool:
+	"""Indica si posible_multiplo es divisible por divisor."""
+	return divisor != 0 and posible_multiplo % divisor == 0
+
+
+if __name__ == "__main__":
+	primero = int(input("Introduce el primer entero: "))
+	segundo = int(input("Introduce el segundo entero: "))
+
+	resultado = es_multiplo(primero, segundo)
+	print(resultado)
+	if resultado:
+		print("es multiplo.")
+	else:
+		print("no es multiplo.")
+
+	resultado = es_multiplo(segundo, primero)
+	print(resultado)
+	if resultado:
+		print("es multiplo ")
+	else:
+		print("no es multiplo .")
+			
+def es_perfecto(numero):
+    suma = 0
+
+    for divisor in range(1, numero):
+        if numero % divisor == 0:
+            suma = suma + divisor
+
+    return suma == numero
+
+
+print("=== NUMEROS PERFECTOS ===")
+print("Ingrese un numero negativo para terminar.")
+
+while True:
+    numero = int(input("Ingrese un numero entero mayor que 2: "))
+
+    if numero < 0:
+        print("Programa finalizado.")
+        break
+
+    if numero <= 2:
+        print("Error: debe ingresar un numero mayor que 2.")
+    elif es_perfecto(numero):
+        print(numero, "es un numero perfecto.")
+    else:
+        print(numero, "no es un numero perfecto.")
+"""
+Cree una función para número perfecto. Un divisor propio es un entero positivo
+menor que n que lo divide sin residuo. Un número perfecto coincide con la suma de sus
+divisores propios; 1 no tiene divisores propios. La revisión termina antes de n. Realice
+dos llamadas y presente los retornos por separado. Contrato: Número perfecto: recibe
+un entero n entre 1 y 10000 y devuelve verdadero si n es perfecto, falso en otro caso.
+"""
+
+
+class Suma:
+    """Proporciona la comprobación de números perfectos."""
+
+    def numero_perfecto(self, n: int) -> bool:
+        """Devuelve True si n es igual a la suma de sus divisores propios."""
+        if not isinstance(n, int) or isinstance(n, bool) or not 1 <= n <= 10000:
+            raise ValueError("n debe ser un entero entre 1 y 10000")
+
+        suma_divisores = sum(divisor for divisor in range(1, n) if n % divisor == 0)
+        return suma_divisores == n
+
+
+suma = Suma()
+numero1 = int(input("Ingrese numero: "))
+numero2 = int(input("Ingrese otro numero: "))
+
+print(suma.numero_perfecto(numero1))
+print(suma.numero_perfecto(numero2))
+
+
+
+def es_abundante(numero):
+    suma = 0
+
+    for divisor in range(1, numero):
+        if numero % divisor == 0:
+            suma = suma + divisor
+
+    return suma > numero
+
+print("=== NUMEROS ABUNDANTES ===")
+
+inicio = int(input("Ingrese el rango inicial: "))
+final = int(input("Ingrese el rango final: "))
+
+if inicio <= 0 or final <= 0 or inicio > final:
+    print("Error: ingrese un rango valido.")
+else:
+    print("Numeros abundantes encontrados:")
+
+    encontrados = 0
+
+    for numero in range(inicio, final + 1):
+        if es_abundante(numero):
+            print(numero)
+            encontrados = encontrados + 1
+
+    if encontrados == 0:
+        print("No hay numeros abundantes en ese rango.")
+
+    print("Total de numeros abundantes:", encontrados)
+"""
+Cree las funciones necesarias para reposición con mínimo y capacidad máxima. Solo se repone
+cuando existencias es menor que mínimo. Los pedidos son múltiplos enteros del lote y se busca el
+menor pedido que alcance el mínimo sin superar la capacidad. La función de pedido reutiliza
+necesidad y una función de lotes necesarios. El escenario distingue «no reponer», cantidad válida e
+imposibilidad. Contratos en orden de parámetros: Necesidad: recibe existencias y mínimo enteros
+no negativos y devuelve lógico. Lotes necesarios: recibe faltante entero positivo y lote entero
+positivo y devuelve entero positivo. Pedido: recibe existencias, mínimo y capacidad enteros no
+negativos, con existencias ≤ capacidad y mínimo ≤ capacidad, y lote entero positivo y devuelve
+entero no negativo o - 1.
+"""
+def necesita_reponer(existencias, minimo):
+    return existencias < minimo
+
+
+def lotes_necesarios(faltante, lote):
+    return (faltante + lote - 1) // lote
+
+
+def pedido(existencias, minimo, capacidad, lote):
+    if existencias < 0 or minimo < 0 or capacidad < 0:
+        return -1
+
+    if existencias > capacidad or minimo > capacidad or lote <= 0:
+        return -1
+
+    if existencias >= minimo:
+        return 0
+
+    faltante = minimo - existencias
+    lotes = lotes_necesarios(faltante, lote)
+    cantidad = lotes * lote
+
+    if existencias + cantidad > capacidad:
+        return -1
+
+    return cantidad
+
+
+# Programa principal
+print("=== REPOSICION DE INVENTARIO ===")
+
+existencias = int(input("Ingrese las existencias actuales: "))
+minimo = int(input("Ingrese la cantidad minima: "))
+capacidad = int(input("Ingrese la capacidad maxima: "))
+lote = int(input("Ingrese la cantidad de unidades por lote: "))
+
+if existencias >= 0 and minimo >= 0 and capacidad >= 0 and lote > 0:
+    if existencias <= capacidad and minimo <= capacidad:
+        if necesita_reponer(existencias, minimo):
+            print("Necesita reponer: verdadero")
+        else:
+            print("Necesita reponer: falso")
+
+        resultado = pedido(existencias, minimo, capacidad, lote)
+
+        if resultado == -1:
+            print("Retorno: -1; no cabe el pedido")
+        else:
+            print("Cantidad que debe pedir:", resultado)
+    else:
+        print("Error: revise las existencias y la capacidad.")
+else:
+    print("Error: ingrese valores validos.")
+def cupos_libres(capacidad: int, ocupacion: int) -> int:
+    """Devuelve los cupos libres; la ocupación debe estar entre 0 y capacidad."""
+    if not isinstance(capacidad, int) or isinstance(capacidad, bool) or capacidad < 0:
+        raise ValueError("La capacidad debe ser un entero no negativo.")
+    if not isinstance(ocupacion, int) or isinstance(ocupacion, bool):
+        raise ValueError("La ocupación debe ser un entero.")
+    if not 0 <= ocupacion <= capacidad:
+        raise ValueError("La ocupación debe estar entre 0 y la capacidad.")
+    return capacidad - ocupacion
+
+
+def elegir_sala(
+    capacidad1: int,
+    ocupacion1: int,
+    capacidad2: int,
+    ocupacion2: int,
+    grupo: int,
+) -> int:
+    """Devuelve 1 o 2 para la sala elegida, o 0 si el grupo no cabe."""
+    libres1 = cupos_libres(capacidad1, ocupacion1)
+    libres2 = cupos_libres(capacidad2, ocupacion2)
+    if not isinstance(grupo, int) or isinstance(grupo, bool) or grupo <= 0:
+        raise ValueError("El grupo debe ser un entero positivo.")
+
+    elegibles = []
+    if libres1 >= grupo:
+        elegibles.append((libres1 - grupo, 1))
+    if libres2 >= grupo:
+        elegibles.append((libres2 - grupo, 2))
+    return min(elegibles)[1] if elegibles else 0
+
+
+def main() -> None:
+    capacidad1 = int(input("Ingrese la capacidad de la sala 1: "))
+    ocupacion1 = int(input("Ingrese la ocupación de la sala 1: "))
+    capacidad2 = int(input("Ingrese la capacidad de la sala 2: "))
+    ocupacion2 = int(input("Ingrese la ocupación de la sala 2: "))
+    grupo = int(input("Ingrese la cantidad de personas del grupo: "))
+
+    sala = elegir_sala(capacidad1, ocupacion1, capacidad2, ocupacion2, grupo)
+    if sala == 0:
+        print("No hay una sala disponible para todo el grupo")
+    else:
+        print(f"La sala elegida es: {sala}")
+
+
+if __name__ == "__main__":
+    main()
